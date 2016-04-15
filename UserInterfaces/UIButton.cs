@@ -215,7 +215,7 @@ namespace UserInterfaces
             this.mstate_old = this.mstate;
         }
 
-        //Draw the menu - This doesn't take care of the centered option yet. Depends of where i put that part...
+        //Draw the button - still ToDo.
         public void draw(SpriteBatch sb)
         {
             //Todo: Add drawing code
