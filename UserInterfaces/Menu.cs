@@ -16,7 +16,7 @@ using Microsoft.Xna.Framework.Graphics;
 namespace UserInterfaces
 {
     //A Menu :)
-    class Menu
+    public class Menu : UIElement
     {
         //Current menu entry index; -1=no active entry
         int current_entry = -1;
@@ -39,14 +39,6 @@ namespace UserInterfaces
             set { centered = value; }
         }
 
-        //Font for the menu
-        SpriteFont font;
-        public SpriteFont Font
-        {
-            get { return font; }
-            set { font = value; }
-        }
-
         //Colors: Idle and active color
         Color color, color_active;
         public Color Color
@@ -55,22 +47,14 @@ namespace UserInterfaces
             set { color = value; }
         }
 
-        //Bounds of the menu
-        Rectangle bounds;
-        public Rectangle Bounds
-        {
-            get { return bounds; }
-            set { bounds = value; }
-        }
-
         //Creates an empty menu with the given Bounds, font, Colors and either centers the entries or renders them left-aligned
-        public Menu(Rectangle bounds, SpriteFont font, Color active, Color color, bool centered)
+        public Menu(Rectangle bounds, SpriteFont font, Color active, Color color, bool centered) :base(bounds,font)
         {
             this.centered = centered;
-            this.bounds = bounds;
+            
             this.color = color;
             this.color_active = active;
-            this.font = font;
+            
         }
 
         //Add an entry to the menu with given name and onclick action
@@ -130,7 +114,7 @@ namespace UserInterfaces
                 return;
             
             //Intersection found - Invoke menu entry action if mouse has been pressed.
-            if (this.mstate.LeftButton == ButtonState.Pressed &&this.mstate!=this.mstate_old)
+            if (this.mstate.LeftButton == ButtonState.Pressed &&this.mstate.LeftButton!=this.mstate_old.LeftButton)
             {
                 this.menu_entries[this.current_entry].Action.Invoke();
             }
