@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 /*
 
 	Simple Menu generator taking Entry-Strings and actions which are invoked on click.
-	Version: 0.5
+	Version: 0.6
 	Author : 2016 by Kim Oliver Schweikert
 	License: CC-by
 
@@ -81,15 +81,21 @@ namespace UserInterfaces
             int entrynum=this.menu_entries.Count;
             Point entry_size=this.font.MeasureString(name.ToUpper()).ToPoint();
 
+            //Add the entry to the list
             this.menu_entries.Add(new Menu_Entry(action, name));
             
             //Calculate the bounding rectangle for this menu entry.
             if (centered)
             {
-                //Fill with center-Stuff. But i guess i could just also do that with the drawing origin...
+                
+                //Center the bounding rectangle
+                this.menu_entries[entrynum].Collision_rect = new Rectangle(
+                        (this.bounds.Location.ToVector2()+new Vector2(this.bounds.Width/2-(entry_size.X/2),0) + new Vector2(0, entrynum * entry_size.Y)).ToPoint(), entry_size
+                );
             }
             else
             {
+                //Make the bounding rectangle left-aligned
                 this.menu_entries[entrynum].Collision_rect = new Rectangle(
                         (this.bounds.Location.ToVector2() + new Vector2(0, entrynum * entry_size.Y)).ToPoint(), entry_size
                 );
@@ -134,31 +140,35 @@ namespace UserInterfaces
             this.mstate_old = this.mstate;
         }
 
-
         //Draw the menu - This doesn't take care of the centered option yet. Depends of where i put that part...
-        public void draw(SpriteBatch sb) {
-            
+        public void draw(SpriteBatch sb)
+        {
+
             //Draw all the entries
-            for(int i=0;i<this.menu_entries.Count;i++){
+            for (int i = 0; i < this.menu_entries.Count; i++)
+            {
                 Color current_color = this.color;
                 float scale = 1.0f;
 
                 //If we draw the active entry, change size and color
-                if (i == this.current_entry) {
+                if (i == this.current_entry)
+                {
                     scale = 1.01f;
                     current_color = this.color_active;
                 }
-
+              
                 //Shadow for testing. Replace with effect later...
                 sb.DrawString(this.font, this.menu_entries[i].Name.ToUpper(), this.menu_entries[i].Collision_rect.Location.ToVector2() + new Vector2(4, 4), Color.Black * 0.4f, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1.0f);
                 //Draw the font
                 sb.DrawString(this.font, this.menu_entries[i].Name.ToUpper(), this.menu_entries[i].Collision_rect.Location.ToVector2(), current_color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1.0f);
+                
             }
         }
 
         //Menu entry subclass
         public class Menu_Entry
         {
+            //Bounding rectangle of the text
             Rectangle collision_rect;
             public Rectangle Collision_rect
             {
@@ -166,6 +176,7 @@ namespace UserInterfaces
                 set { collision_rect = value; }
             }
 
+            //Action to invoke for this entry when clicked
             Action action;
             public Action Action
             {
@@ -173,6 +184,7 @@ namespace UserInterfaces
                 set { action = value; }
             }
             
+            //Name of the entry
             string name;
             public string Name
             {
@@ -180,6 +192,7 @@ namespace UserInterfaces
                 set { name = value; }
             }
 
+            //Creates a new menu entry with given name that executes action when clicked
             public Menu_Entry(Action action, string name)
             {
                 this.action = action;
