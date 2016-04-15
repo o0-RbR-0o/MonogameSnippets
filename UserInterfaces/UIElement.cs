@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 */
 
-namespace Uboot_Terrain
+namespace UserInterfaces
 {
     //A basic UI-Element
     public class UIElement
